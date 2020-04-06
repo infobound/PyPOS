@@ -1,0 +1,25 @@
+{
+  "General": {
+
+  },
+  "Database": {
+    "Type": "MySQL",
+    "Connection String": "conn"
+  },
+  "Hardware": [
+    {
+      "HID": "132764DABFG0234",
+      "Type": "Touch Screen"
+    },
+    {
+      "HID": "",
+      "Type": "Printer",
+      "Name": "//USB/3/Canon Thermal Reciept Printer"
+    },
+    {
+      "HID": "",
+      "Type": "Card Reader",
+      "Card Types": ["Swipe", "Near-Fi", "Chip"]
+    }
+  ]
+}
