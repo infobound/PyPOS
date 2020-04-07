@@ -1,5 +1,6 @@
 from Global.Settings import Settings
 from Forms.FormSettings import FormSettings
+from DB.MySQL import MySQL
 import tkinter
 
 #init settings
@@ -13,6 +14,9 @@ def main():
     print("Connecting to Database")
     print(LocalSettings.Get("Database/Type"))
     print(LocalSettings.Get("Database/Connection String"))
+    db=MySQL()
+    db.GetTest()
+
 
     print("Connecting to Central Processing Server")
     print("to do")
