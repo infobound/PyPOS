@@ -27,7 +27,10 @@ class Settings:
         SettingsPart=self.SettingsData
         PathParts=GlobalFunctions.ParsePathToList(Path)
         for Part in PathParts:
-            SettingsPart=SettingsPart[Part]
+            try:
+                SettingsPart=SettingsPart[Part]
+            except:
+                return "";
 
         return SettingsPart
 

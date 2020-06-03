@@ -15,6 +15,8 @@ def main():
 
     print("Connecting to Database...")
 
+    #to do: code to use mssql and flat files
+
     db=MySQL()
     db.Open(LocalSettings.Get('Database/Host'),
         LocalSettings.Get('Database/Catalog'),
@@ -34,3 +36,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

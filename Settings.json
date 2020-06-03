@@ -5,7 +5,7 @@
   "Database": {
     "Type": "MySQL",
     "Host": "localhost",
-    "Catalog": "edens_wrath",
+    "Catalog": "pypos",
     "User": "root",
     "Passwd": "0321"
   },
