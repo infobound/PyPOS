@@ -4,7 +4,10 @@
   },
   "Database": {
     "Type": "MySQL",
-    "Connection String": "conn"
+    "Host": "localhost",
+    "Catalog": "edens_wrath",
+    "User": "root",
+    "Passwd": "0321"
   },
   "Hardware": [
     {

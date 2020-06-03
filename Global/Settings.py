@@ -7,7 +7,6 @@ class Settings:
     # Class variables
     SettingsData=""
 
-
     def init(self):
         return
 
