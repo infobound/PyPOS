@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\DB"
+    "\\DB",
+    "\\DB\\__pycache__",
+    "\\Forms"
   ],
-  "SelectedNode": "\\DB\\MySQL.py",
+  "SelectedNode": "\\Settings.json",
   "PreviewInSolutionExplorer": false
 }

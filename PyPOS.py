@@ -1,7 +1,6 @@
 from Global.Settings import Settings
 from Forms.FormSettings import FormSettings
 from DB.MySQL import MySQL
-import tkinter
 
 LocalSettings=Settings()
 
@@ -28,8 +27,8 @@ def main():
     print("to do")
 
     print("Starting Interface...")
-    frmSettings=FormSettings()
-    frmSettings.Show(LocalSettings)
+    fSettings=FormSettings()
+    fSettings.Show(LocalSettings)
 
 
 

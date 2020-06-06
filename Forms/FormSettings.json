@@ -1,0 +1,139 @@
+{
+    "title": "System Settings",
+    "attributes": "-fullscreen",
+    "name": "frmSettings",
+    "references": [
+        "import tkinter",
+        "from tkinter import ttk",
+        "from tkinter import messagebox",
+        "from Global.Settings import Settings",
+        "from Global.Functions import Functions"
+    ],
+    "widgets": [
+        {
+            "type": "frame",
+            "name": "frameDB",
+            "config": "\"relief=\"sunken\",borderwidth=2\"",
+            "position": "x=20,y=20,width=500,height=150",
+            "widgets": [
+                {
+                    "type": "label",
+                    "text": "Database Settings",
+                    "position": "x=0,y=0"
+                },
+                {
+                    "type": "label",
+                    "text": "Type:",
+                    "position": "x=10,y=30"
+                },
+                {
+                    "type": "Combobox",
+                    "name": "cbDBTypes",
+                    "position": "x=100,y=30",
+                    "options": [
+                        {
+                            "key": "state",
+                            "value": "readonly"
+                        }
+                    ],
+                    "values": [
+                        {
+                            "text": "MySQL",
+                            "value": "mysql"
+                        },
+                        {
+                            "text": "Microsoft SQL",
+                            "value": "mssql"
+                        },
+                        {
+                            "text": "Flat Files",
+                            "value": "flat"
+                        }
+                    ]
+                },
+                {
+                    "type": "label",
+                    "text": "Server:",
+                    "position": "x=10,y=30"
+                },
+                {
+                    "type": "entry",
+                    "name": "txtServer",
+                    "position": "x=130, y=30, width=300"
+                },
+                {
+                    "type": "label",
+                    "text": "Database:",
+                    "position": "x=10,y=60"
+                },
+                {
+                    "type": "entry",
+                    "name": "txtDatabase",
+                    "position": "x=130, y=60, width=300"
+                },
+                {
+                    "type": "label",
+                    "text": "User Name:",
+                    "position": "x=10,y=90"
+                },
+                {
+                    "type": "entry",
+                    "name": "txtUser",
+                    "position": "x=130, y=90, width=300"
+                },
+                {
+                    "type": "label",
+                    "text": "Password:",
+                    "position": "x=10,y=120"
+                },
+                {
+                    "type": "entry",
+                    "name": "txtServer",
+                    "position": "x=130, y=120, width=300"
+                },
+                {
+                    "type": "button",
+                    "name": "btnTestDB",
+                    "text": "Test Connection",
+                    "position": "x=10,y=100,width=25",
+                    "programming": [
+                        {
+                            "event": "click",
+                            "action": "messagebox.showinfo(title=\"Test DB Connection\", message=\"Test Succesful\")\rreturn\r"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "button",
+            "name": "btnApply",
+            "text": "Save",
+            "position": "x=30,y=300,width=25",
+            "programming": [
+                {
+                    "event": "click",
+                    "action": "messagebox.showinfo(title=\"Save Changes\", message=\"Test Succesful\")\rfrmSettings.destroy\r"
+                }
+            ]
+        },
+        {
+            "type": "button",
+            "name": "btnTestDB",
+            "text": "Test Connection",
+            "position": "x=10,y=100,width=25",
+            "programming": [
+                {
+                    "event": "click",
+                    "action": "frmSettings.destroy\r"
+                }
+            ]
+        }
+    ],
+    "programming": [
+        {
+            "event": "init",
+            "actions": "strDBType=LocalSettings.Get(\"Database/Type\")\rLoopCnt=-1\rfor val in cbDBType[\"values\"]:\r    LoopCnt+=1\r    print(val+\"=\"+strDBType)\r    if val==strDBType:\r        print(val)\r        cbDBType.current(LoopCnt)\r        strConnStr=LocalSettings.Get(\"Database/Connection String\")\r        Functions.SetEntryInput(txtConnStr,strConnStr\r"
+        }
+    ]
+}
