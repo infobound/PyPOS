@@ -1,12 +1,10 @@
-#import mysql.connector
-
-class MSSQL:
-    """Code for using a MySQL database"""
+class FlatFiles:
+    """Code for using a text files as a database"""
 
     def init(self):
         return
 
-    def Open(self,server,catalog,username,pwd):
+    def Open():
         #to do
         return;
 

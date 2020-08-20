@@ -1,10 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\DB",
-    "\\DB\\__pycache__",
-    "\\Forms"
+    "\\Data",
+    "\\Forms",
+    "\\Forms\\Widgets",
+    "\\Global",
+    "\\Install",
+    "\\Resources"
   ],
-  "SelectedNode": "\\Settings.json",
+  "SelectedNode": "\\Install\\Install_Script.txt",
   "PreviewInSolutionExplorer": false
 }

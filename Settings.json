@@ -6,8 +6,8 @@
     "Type": "MySQL",
     "Host": "localhost",
     "Catalog": "pypos",
-    "User": "root",
-    "Passwd": "0321"
+    "User": "pi",
+    "Password": "0321"
   },
   "Hardware": [
     {

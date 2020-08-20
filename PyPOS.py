@@ -1,8 +1,20 @@
-from Global.Settings import Settings
-from Forms.FormSettings import FormSettings
-from DB.MySQL import MySQL
+import Global.Settings as Settings
+import Global.Functions as Functions
+from Forms.formTopLevel import formTopLevel
+import Data.DB as posDB
 
-LocalSettings=Settings()
+try:
+    import Tkinter as tk
+except ImportError:
+    import tkinter as tk
+
+try:
+    import ttk
+    py3 = False
+except ImportError:
+    import tkinter.ttk as ttk
+    py3 = True
+
 
 #init settings
 def main():
@@ -10,28 +22,26 @@ def main():
 
     print("Loading Settings...")
 
-    LocalSettings.LoadSettings()
+    Settings.LoadSettings()
 
     print("Connecting to Database...")
 
-    #to do: code to use mssql and flat files
+    print("to do: code to use mssql and flat files")
 
-    db=MySQL()
-    db.Open(LocalSettings.Get('Database/Host'),
-        LocalSettings.Get('Database/Catalog'),
-        LocalSettings.Get('Database/User'),
-        LocalSettings.Get('Database/Passwd'))
-
+    posDB.Open()
 
     print("Connecting to Central Processing Server...")
-    print("to do")
+    print("to do: Central Processing Server")
 
     print("Starting Interface...")
-    fSettings=FormSettings()
-    fSettings.Show(LocalSettings)
+    
+    print("USB:")
+    Functions.GetAllUSBDevices()
 
 
-
+    root=tk.Tk()
+    tl=formTopLevel(top=root)
+    root.mainloop()
 
 if __name__ == "__main__":
     main()

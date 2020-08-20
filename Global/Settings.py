@@ -1,39 +1,42 @@
 import json
-from Global.Functions import Functions
+import Global.Functions as Functions
 
-class Settings:
-    """this is my setting class"""
+global SettingsData
+SettingsData=""
 
-    # Class variables
-    SettingsData=""
+def LoadSettings():
+    global SettingsData
 
-    def init(self):
-        return
+    #read from Settings.json
+    with open('Settings.json', 'r') as file:
+        #SettingsData is a string
+        SettingsData = json.load(file)
 
-    def LoadSettings(self):
-        #read from Settings.json
-        with open('Settings.json', 'r') as file:
-            #SettingsData is a string
-            self.SettingsData = json.load(file)
+def SaveSettings():
+    global SettingsData
 
-    def SaveSettings(self):
-        #save to Settings.json
-        print("to do")
+    #save to Settings.json
+    print("to do: save settings")
 
-    def Get(self,Path):
-        #Path is a URI
-        #"//Database/Connection string"
-        GlobalFunctions=Functions()
-        SettingsPart=self.SettingsData
-        PathParts=GlobalFunctions.ParsePathToList(Path)
-        for Part in PathParts:
-            try:
-                SettingsPart=SettingsPart[Part]
-            except:
-                return "";
+def Get(Path):
+    global SettingsData
 
-        return SettingsPart
+    #Path is a URI
+    #"//Database/Connection string"
+    if SettingsData=='':
+        LoadSettings()
+    SettingsPart=SettingsData
+    PathParts=Functions.ParsePathToList(Path)
+    for Part in PathParts:
+        try:
+            SettingsPart=SettingsPart[Part]
+        except:
+            return "";
 
-    def Set(self,Path,Value):
-        #set Value
-        print("to do")
+    return SettingsPart
+
+def Set(Path,Value):
+    global SettingsData
+
+    #set Value
+    print("to do: set variable")
