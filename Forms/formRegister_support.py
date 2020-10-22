@@ -8,7 +8,9 @@
 import sys
 import threading
 import Data.DB as posDB
-
+import Forms.formRegister_cart as UICart
+import keyboard
+import datetime
 
 try:
     import Tkinter as tk
@@ -22,7 +24,43 @@ except ImportError:
     import tkinter.ttk as ttk
     py3 = True
 
+global KeysRecorded
+global KeyPressTiming
+
+KeysRecorded=""
+KeyPressTiming=-1
 formRegister=None
+Cart=UICart.Cart()
+
+def key_pressed(event):
+    print("to do - key capture") #I hate this
+
+    global KeysRecorded
+    global KeyPressTiming
+
+    #check for enter key
+    if(event.keysym=="Return" and KeyPressTiming!=-1):
+        #check that time is less than 1 second
+        KeyPressDiff=(datetime.datetime.utcnow()-KeyPressTiming).total_seconds()
+        if(KeyPressDiff<=1):
+            #call function to add to register
+            if AddUPCItemToCart(KeysRecorded)==False:
+                formRegister.lblStatus.configure(activeforeground="red")
+                formRegister.lblStatus.configure(text='''Status: Error adding upc item to cart''')
+            KeysRecorded=""
+            KeyPressTiming=-1
+            return
+        else:
+            KeysRecorded=""
+            KeyPressTiming=-1
+            return
+
+    KeysRecorded=KeysRecorded+event.char
+    if(KeyPressTiming==-1):
+        KeyPressTiming=datetime.datetime.utcnow()
+        formRegister.lblStatus.configure(activeforeground="green")
+        formRegister.lblStatus.configure(text='''Status: Ready''')
+
 
 def UpdateGUI():
     formRegister.scrollOrderItems = tk.Scrollbar(formRegister.frameOrderItems)
@@ -30,7 +68,6 @@ def UpdateGUI():
     formRegister.canvasOrderItems.config(yscrollcommand=formRegister.scrollOrderItems.set)
     formRegister.scrollOrderItems.config(command = formRegister.canvasOrderItems.yview )
     print("to do: fix scrollbar")
-    #print(formRegister.canvasOrderItems.winfo_height())
 
 def set_Tk_var():
     global combobox
@@ -45,45 +82,51 @@ def OrderItemClick(event, arg):
     print(event)
     print(arg)
 
-def LoadOrderItems():
-    print("to do: LoadOrderItems")
-
+def LoadCartItems():
     import locale
     locale.setlocale( locale.LC_ALL, '' )
     intLineHeight=40
-    for line in range(15):
-        formRegister.LineItemDesc=tk.Label(formRegister.canvasOrderItems)
-        formRegister.LineItemDesc.place(x=0,y=line*intLineHeight)
-        formRegister.LineItemDesc.config(text="label %d" % line, width=19,height=2,anchor="w")
-        formRegister.LineItemDesc.config(font="-family {Segoe UI} -size 11")
-        formRegister.LineItemDesc.bind('<Button-1>', lambda event, arg=line: OrderItemClick(event, arg))
-        if (line % 2==1):
-            formRegister.LineItemDesc.config(background="#c0c0c0")
-            
-        formRegister.LineItemDesc=tk.Label(formRegister.canvasOrderItems)
-        formRegister.LineItemDesc.config(text="%d" % line, width=5,height=2)
-        formRegister.LineItemDesc.place(x=140,y=line*intLineHeight)
-        formRegister.LineItemDesc.config(font="-family {Segoe UI} -size 11")
-        formRegister.LineItemDesc.bind('<Button-1>', lambda event, arg=line: OrderItemClick(event, arg))
-        if (line % 2==1):
-            formRegister.LineItemDesc.config(background="#c0c0c0")
+    intRowCnt=-1
+    for ci in Cart.Items:
+        intRowCnt+=1
 
+        #name
         formRegister.LineItemDesc=tk.Label(formRegister.canvasOrderItems)
-        formRegister.LineItemDesc.config(text=locale.currency( line, grouping=True ), width=7,height=2,anchor="e")
-        formRegister.LineItemDesc.place(x=180,y=line*intLineHeight)
+        formRegister.LineItemDesc.place(x=0,y=intRowCnt*intLineHeight)
+        formRegister.LineItemDesc.config(text=ci.Name, width=19,height=2,anchor="w")
         formRegister.LineItemDesc.config(font="-family {Segoe UI} -size 11")
-        formRegister.LineItemDesc.bind('<Button-1>', lambda event, arg=line: OrderItemClick(event, arg))
-        if (line % 2==1):
-            formRegister.LineItemDesc.config(background="#c0c0c0")
-                
-    intCanvasHeight=(line+1)*intLineHeight
+        formRegister.LineItemDesc.bind('<Button-1>', lambda event, arg=intRowCnt: OrderItemClick(event, arg))
+
+        #qty
+        formRegister.LineItemQty=tk.Label(formRegister.canvasOrderItems)
+        formRegister.LineItemQty.config(text=ci.Qty, width=5,height=2)
+        formRegister.LineItemQty.place(x=140,y=intRowCnt*intLineHeight)
+        formRegister.LineItemQty.config(font="-family {Segoe UI} -size 11")
+        formRegister.LineItemQty.bind('<Button-1>', lambda event, arg=intRowCnt: OrderItemClick(event, arg))
+
+        #price
+        formRegister.LineItemPrice=tk.Label(formRegister.canvasOrderItems)
+        formRegister.LineItemPrice.config(text=locale.currency(ci.Price, grouping=True ), width=7,height=2,anchor="e")
+        formRegister.LineItemPrice.place(x=180,y=intRowCnt*intLineHeight)
+        formRegister.LineItemPrice.config(font="-family {Segoe UI} -size 11")
+        formRegister.LineItemPrice.bind('<Button-1>', lambda event, arg=intRowCnt: OrderItemClick(event, arg))
+
+    intCanvasHeight=(len(Cart.Items))*intLineHeight
     formRegister.canvasOrderItems.place(height=intCanvasHeight)
     formRegister.canvasOrderItems.config(scrollregion=(0,0,240,intCanvasHeight))
+
+    formRegister.lblSubTotal.configure(text=locale.currency(Cart.GetSubTotal()))
+    formRegister.lblTax.configure(text=locale.currency(Cart.GetCartTax()))
+    formRegister.lblTotal.configure(text=locale.currency(Cart.GetCartTotal()))
+    
+    
+    
+
 
 
 
 def LoadFoodItems(event, arg):
-    print("to do: LoadFoodItems ", arg)
+    print("to do: LoadFoodItems - Add style to buttons", arg)
     #multiple pages
     #style buttons
     #different size buttons
@@ -111,13 +154,24 @@ def LoadFoodItems(event, arg):
         btn=tk.Button(formRegister.frameItems)
         
         btn.place(x=intCol*105, y=intRow*50+10, height=42, width=97)
-        btn.configure(text=rowTab[4])
+        btn.configure(text=rowTab[2])
         btn.bind('<Button-1>', lambda event, arg=rowTab[0]: AddFoodItemToCart(event, arg))
         
 def AddFoodItemToCart(event, arg):
-    print("to do: AddFoodItemToCart ", arg)
+    Cart.AddFoodItem(arg)
+    LoadCartItems()
+
+def AddUPCItemToCart(strUPC):
+    Cart.AddUPCItem(strUPC)
+    LoadCartItems()
+
+def CheckoutWithCash():
+    print("get cash")
+    for child in formRegister.frameItems.winfo_children():
+        child.destroy()
 
 
-def AddUPCItemToCart(event, arg):
-    print("to do: AddUPCItemToCart ", arg)
 
+    
+def CheckoutWithCard():
+    print("swipe card")

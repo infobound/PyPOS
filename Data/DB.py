@@ -21,4 +21,9 @@ def GetFoodItemGroups():
 def GetFoodItemsByGroupRID(intGroupRID):
     return posDB.GetFoodItemsByGroupRID(intGroupRID)
 
+def GetFoodItemDetails(RID):
+    return posDB.GetFoodItemDetails(RID)
+
+def GetUPCItemDetails(UPC):
+    return posDB.GetUPCItemDetails(UPC)
 

@@ -3,11 +3,11 @@
     "",
     "\\Data",
     "\\Forms",
-    "\\Forms\\Widgets",
     "\\Global",
+    "\\Hardware",
     "\\Install",
     "\\Resources"
   ],
-  "SelectedNode": "\\Install\\Install_Script.txt",
+  "SelectedNode": "\\Forms\\formRegisterPayments_support.py",
   "PreviewInSolutionExplorer": false
 }

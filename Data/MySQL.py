@@ -13,14 +13,9 @@ def Open():
     
     if boolConnected==False:
         try:
-            print(Settings.Get("Database/Host"))
-            print(Settings.Get("Database/User"))
-            print(Functions.Decode(Settings.Get("Database/Password")))
-            print(Settings.Get("Database/Catalog"))
-
             connDB = mysql.connector.connect(
                 host=Settings.Get("Database/Host"),
-                port=3306,
+                port=Settings.Get("Database/Port"),
                 user=Settings.Get("Database/User"),
                 password=Functions.Decode(Settings.Get("Database/Password")),
                 db=Settings.Get("Database/Catalog")
@@ -42,10 +37,8 @@ def Close():
 def GetFoodItemGroups():
     global connDB
     Open()
-
-
     cur = connDB.cursor()
-    cur.execute("CALL spGetFoodItemGroups")
+    cur.execute("SELECT * FROM pypos.viewfooditemgroups;")
     results=cur.fetchall()
     cur=None
     Close()
@@ -55,20 +48,32 @@ def GetFoodItemGroups():
 def GetFoodItemsByGroupRID(intGroupRID):
     global connDB
     Open()
-
-    try:
-        cur = connDB.cursor()
-    except Exception as e:
-        #by opening connection and closing after stopped the connection not availble error
-        print(e)
-        return None
-    
-    #huuuuuuuuuuuuuuh!!!! to do
-    cur.callproc("spGetFoodItemsByGroupRID", [intGroupRID, ])
-    for fixthis in cur.stored_results():
-        results=fixthis.fetchall()
-        break
-    #---------------------------
-
+    cur = connDB.cursor()
+    cur.execute("select * from viewfooditems where fiFoodItemGroupRID="+str(intGroupRID)+";")
+    results=cur.fetchall()
+    cur=None
     Close()
+
+    return results
+
+def GetFoodItemDetails(intFoodItemRID):
+    global connDB
+    Open()
+    cur = connDB.cursor()
+    cur.execute("SELECT fiName, fiDescription, fiPrice, ttAmount FROM pypos.tblfooditems inner join tblTax on fiTaxTableRID=ttRID where fiRID="+str(intFoodItemRID)+";")
+    results=cur.fetchall()
+    cur=None
+    Close()
+
+    return results
+
+def GetUPCItemDetails(strUPCItemRID):
+    global connDB
+    Open()
+    cur = connDB.cursor()
+    cur.execute("SELECT upcName, upcDescription, upcUnitPrice, ttAmount FROM pypos.tblupcitems inner join tblTax on upcTaxTableRID=ttRID where upcBarCode='"+strUPCItemRID+"';")
+    results=cur.fetchall()
+    cur=None
+    Close()
+
     return results

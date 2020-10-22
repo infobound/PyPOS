@@ -1,18 +1,20 @@
 {
   "General": {
-
+    "Working Directory": "\\"
   },
   "Database": {
     "Type": "MySQL",
-    "Host": "localhost",
+    "Host": "192.168.1.101",
+    "Port":  "3306",
     "Catalog": "pypos",
-    "User": "pi",
+    "User": "pypos",
     "Password": "0321"
   },
   "Hardware": [
     {
       "HID": "132764DABFG0234",
-      "Type": "Touch Screen"
+        "Type": "Touch Screen",
+        "Name":  "HP Touch Monitor"
     },
     {
       "HID": "",

@@ -3,3 +3,4 @@ sudo apt install python3 idle3
 sudo apt install mariadb-server
 pip3 install mysql-connector-python
 sudo mysql_secure_installation
+pip install keyboard

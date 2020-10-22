@@ -1,6 +1,6 @@
-import re
+import re #regulare expression
 import subprocess
-
+import usb.core
 
 def ParsePathToList(Path):
     #turns a url type string to a list of nodes
@@ -30,14 +30,20 @@ def Decode(Encoded):
     return Encoded
 
 def GetAllUSBDevices():
-    device_re = re.compile("Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$", re.I)
+    device_re = re.compile(b"Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$", re.I)
+    print(device_re)
     df = subprocess.check_output("lsusb")
+    print(df)
+    #df=df.split(b"\n")
     devices = []
-    for i in df.split('\n'):
+    for i in df.split(b"\n"):
         if i:
             info = device_re.match(i)
             if info:
                 dinfo = info.groupdict()
                 dinfo['device'] = '/dev/bus/usb/%s/%s' % (dinfo.pop('bus'), dinfo.pop('device'))
                 devices.append(dinfo)
-    print(devices)
+                #print(dinfo)
+    #print(devices)
+    return devices
+

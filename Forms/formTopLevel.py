@@ -87,7 +87,7 @@ class formTopLevel:
         self.btnRegister.configure(foreground="#000000")
         self.btnRegister.configure(highlightbackground="#d9d9d9")
         self.btnRegister.configure(highlightcolor="black")
-        photo_location = "C:/Repos/PyPOS/Resources/Register.png"
+        photo_location = "Resources/Register.png"
         global _img0
         _img0 = tk.PhotoImage(file=photo_location)
         self.btnRegister.configure(image=_img0)
@@ -140,6 +140,8 @@ class formTopLevel:
         self.btrnAdmin.configure(highlightcolor="black")
         self.btrnAdmin.configure(pady="0")
         self.btrnAdmin.configure(text='''Admin''')
+        self.btrnAdmin.configure(command=lambda: top.destroy())
+        
 
 if __name__ == '__main__':
     vp_start_gui()

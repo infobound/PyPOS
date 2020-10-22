@@ -7,6 +7,8 @@
 
 import sys
 import Forms.formRegister_support
+import Forms.formRegister_cart as Cart
+from Forms.formRegisterPayments import RegisterPayments
 import Data.DB as posDB
 
 try:
@@ -22,11 +24,18 @@ except ImportError:
     py3 = True
 
 codeRegister=None
+codePayments=None
  
 class formRegister:
     def __init__(self, top=None):
+        
+
         codeRegister=Forms.formRegister_support
         codeRegister.formRegister=self
+
+        codePayments=RegisterPayments
+
+
 
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
@@ -65,6 +74,18 @@ class formRegister:
         self.Label1.configure(highlightbackground="#d9d9d9")
         self.Label1.configure(highlightcolor="black")
         self.Label1.configure(text='''Patron:''')
+
+        self.lblStatus = tk.Label(top)
+        self.lblStatus.place(x=280, y=640, height=21)
+        self.lblStatus.configure(activebackground="#f9f9f9")
+        self.lblStatus.configure(activeforeground="black")
+        self.lblStatus.configure(background="#d9d9d9")
+        self.lblStatus.configure(disabledforeground="#a3a3a3")
+        self.lblStatus.configure(font="-family {Segoe UI} -size 9 -weight bold -slant roman -underline 0 -overstrike 0")
+        self.lblStatus.configure(foreground="#000000")
+        self.lblStatus.configure(highlightbackground="#d9d9d9")
+        self.lblStatus.configure(highlightcolor="black")
+        self.lblStatus.configure(text='''Status: Ready''')
 
         self.cboPatrons = ttk.Combobox(top)
         self.cboPatrons.place(relx=0.786, rely=0.0, relheight=0.047
@@ -183,18 +204,19 @@ class formRegister:
         self.btnNext.configure(state='disabled')
         self.btnNext.configure(text='''Next''')
 
-        self.btnCredit = tk.Button(top)
-        self.btnCredit.place(relx=0.897, rely=0.926, height=44, width=97)
-        self.btnCredit.configure(activebackground="#ff8040")
-        self.btnCredit.configure(activeforeground="#000000")
-        self.btnCredit.configure(background="#00ffff")
-        self.btnCredit.configure(disabledforeground="#a3a3a3")
-        self.btnCredit.configure(font="-family {Segoe UI} -size 14 -weight bold -slant roman -underline 0 -overstrike 0")
-        self.btnCredit.configure(foreground="#000000")
-        self.btnCredit.configure(highlightbackground="#d9d9d9")
-        self.btnCredit.configure(highlightcolor="black")
-        self.btnCredit.configure(pady="0")
-        self.btnCredit.configure(text='''Credit''')
+        #self.btnCredit = tk.Button(top)
+        #self.btnCredit.place(relx=0.897, rely=0.926, height=44, width=97)
+        #self.btnCredit.configure(activebackground="#ff8040")
+        #self.btnCredit.configure(activeforeground="#000000")
+        #self.btnCredit.configure(background="#00ffff")
+        #self.btnCredit.configure(disabledforeground="#a3a3a3")
+        #self.btnCredit.configure(font="-family {Segoe UI} -size 14 -weight bold -slant roman -underline 0 -overstrike 0")
+        #self.btnCredit.configure(foreground="#000000")
+        #self.btnCredit.configure(highlightbackground="#d9d9d9")
+        #self.btnCredit.configure(highlightcolor="black")
+        #self.btnCredit.configure(pady="0")
+        #self.btnCredit.configure(text='''Credit''')
+        #self.btnCredit.configure(command=lambda: Forms.formRegister_support.CheckoutWithCard())
 
         self.btnCash = tk.Button(top)
         self.btnCash.place(relx=0.796, rely=0.926, height=44, width=97)
@@ -207,8 +229,8 @@ class formRegister:
         self.btnCash.configure(highlightbackground="#d9d9d9")
         self.btnCash.configure(highlightcolor="black")
         self.btnCash.configure(pady="0")
-        self.btnCash.configure(text='''Cash''')
-        self.btnCash.configure(command=lambda: Forms.formRegister_support.ResizeFrameOrderItems(self))
+        self.btnCash.configure(text='''Checkout''')
+        self.btnCash.configure(command=lambda: codePayments.Show(Container=self.frameItems,Cart=codeRegister.Cart))
 
 
         self.btnCancel = tk.Button(top)
@@ -294,30 +316,13 @@ class formRegister:
             arrayArgs=[]
             arrayVals=[]
             self.btnFoodItemGroup = tk.Button(top)
-            self.btnFoodItemGroup.place(x=rowCnt*97, y=0, height=42, width=97)
+            self.btnFoodItemGroup.place(x=rowCnt*97, y=-2, height=42, width=97)
             self.btnFoodItemGroup.configure(text=rowTab[1])
             self.btnFoodItemGroup.bind('<Button-1>', lambda event, arg=rowTab[0]: Forms.formRegister_support.LoadFoodItems(event, arg))
-            #arrayArgAndVal=rowTab[2].split(",")
-            
-        #rowCnt=-1
-        #intFoodItem=0
-        #curFoodItems=posDB.GetFoodItemsByGroupRID(5)
-        #for rowTab in curFoodItems:
-        #    if(intFoodItem==0):
-        #        intFoodItem=rowTab[0]
-
-        #    rowCnt+=1
-        #    arrayArgs=[]
-        #    arrayVals=[]
-        #    btn = tk.Button(self.frameItems)
-        
-        #    btn.place(x=rowCnt*97, y=0, height=42, width=97)
-        #    btn.configure(text=rowTab[4])
-        #    btn.bind('<Button-1>', lambda event, arg=rowTab[0]: Forms.formRegister_support.addtocart(event, arg))
-        
+       
 
         codeRegister.LoadFoodItems(event=None, arg=intFoodItem)
-        codeRegister.LoadOrderItems()
+        codeRegister.LoadCartItems()
 
     def apply_conf(self, control, conf):
         for k, v in conf.items():
